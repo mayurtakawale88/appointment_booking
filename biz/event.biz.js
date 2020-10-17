@@ -5,6 +5,7 @@ const EventService = require('../services/event.service');
 
 const {
 	SlotAvailabilityException,
+	InvalidParamException,
 } = require('../exceptions');
 
 class EventBiz {
@@ -14,7 +15,9 @@ class EventBiz {
 				const date = dateHelper.getDate(dateTime);
                 
 				// Check given date and time is greater than current date time validation
-				// to be implement
+				if (new Date() > new Date(date)) {
+					throw new InvalidParamException('Date should be greated than current date');
+				}
 
 				const startDateTime = moment(date + serviceConstants.START_TIME).utc();
 				const endDateTime = moment(date + serviceConstants.END_TIME).utc();
@@ -59,8 +62,10 @@ class EventBiz {
 	getFreeSlots(date, timeZone) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				// date validation passed date should not be lower that current date
-				// to be implement
+				// date validation passed date should not be lower than current date
+				if (new Date() > new Date(date)) {
+					throw new InvalidParamException('Date should be greated than current date');
+				}
 
 				const startDateTime = moment(date + serviceConstants.START_TIME).utc();
 				const endDateTime = moment(date + serviceConstants.END_TIME).utc();
@@ -86,7 +91,10 @@ class EventBiz {
 				const eventServie = new EventService();
 
 				// Date validation date 1 should not be grater than date2
-				// to be implement
+				if (date2 < date1) {
+					throw new InvalidParamException('From Date should be lower than To date');
+				}
+
 				let startDate = date1;
 				while (startDate <= date2) {
 					const bookedSlots = await eventServie.getBookedSlotByDate(startDate);
