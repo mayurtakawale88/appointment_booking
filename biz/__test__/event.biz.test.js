@@ -38,4 +38,12 @@ describe('Test event business logic', () => {
 		const data = await eventBiz.getFreeSlots(date, timeZone);
 		console.log(data);
 	});
+
+	it('Test booked event', async () => {
+		const date1 = '2020-10-17';
+		const date2 = '2020-10-18';
+		const eventBiz = new EventBiz();
+		const data = await eventBiz.getBookedEvents(date1, date2);
+		console.log(data);
+	});
 });

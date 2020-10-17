@@ -51,7 +51,7 @@ module.exports = {
 		try {
 			const AM = [];
 			const PM = [];
-			const timeZone = serviceConstant.TIME_ZONE[tz];
+			const timeZone = serviceConstant.TIME_ZONE[tz] || 'UTC';
 			for (let i = 0; i < times.length; i++) {
 				const tzTime = moment.tz(times[i], timeZone).format('hh:mm A');
 				if (tzTime.indexOf('AM') > 0) {

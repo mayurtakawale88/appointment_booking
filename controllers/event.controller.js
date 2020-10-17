@@ -48,10 +48,23 @@ class EventController {
 				}
 			});
 
-		app.route('/booked-evnets')
+		app.route('/booked-events')
 			.get(async (request, response, next) => {
 				try {
-					
+					const {
+						dateFrom,
+						dateTo,
+					} = request.query;
+
+					const validator = new EventValidator();
+					validator.bookedEvents(request.query);
+
+					const eventBiz = new EventBiz();
+					const bookedEvent = await eventBiz.getBookedEvents(dateFrom, dateTo);
+
+					response.json({
+						bookedEvent,
+					}, 'Booked Events');
 				} catch (error) {
 					next(error);
 				}

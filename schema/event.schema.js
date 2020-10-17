@@ -38,4 +38,20 @@ module.exports = {
 			},
 		},
 	},
+	bookedEventsSchema: {
+		id: '/booked-events',
+		type: 'object',
+		additionalProperties: true,
+		required: [],
+		properties: {
+			dateFrom: {
+				type: 'string',
+				pattern: '\\d{4}-[01]\\d-[0-3]\\d$',
+			},
+			dateTo: {
+				type: 'string',
+				pattern: '\\d{4}-[01]\\d-[0-3]\\d$',
+			},
+		},
+	},
 };

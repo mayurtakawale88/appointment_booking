@@ -14,7 +14,7 @@ class EventBiz {
 				const date = dateHelper.getDate(dateTime);
                 
 				// Check given date and time is greater than current date time validation
-				// need to be implment
+				// to be implement
 
 				const startDateTime = moment(date + serviceConstants.START_TIME).utc();
 				const endDateTime = moment(date + serviceConstants.END_TIME).utc();
@@ -59,6 +59,9 @@ class EventBiz {
 	getFreeSlots(date, timeZone) {
 		return new Promise(async (resolve, reject) => {
 			try {
+				// date validation passed date should not be lower that current date
+				// to be implement
+
 				const startDateTime = moment(date + serviceConstants.START_TIME).utc();
 				const endDateTime = moment(date + serviceConstants.END_TIME).utc();
 
@@ -70,6 +73,28 @@ class EventBiz {
 				// Group by AM, PM
 				const freeSlotsGrp = dateHelper.groupByAmPm(freeSlot, timeZone);
 				resolve(freeSlotsGrp);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	}
+
+	getBookedEvents(date1, date2) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const bookedEvents = {};
+				const eventServie = new EventService();
+
+				// Date validation date 1 should not be grater than date2
+				// to be implement
+				let startDate = date1;
+				while (startDate <= date2) {
+					const bookedSlots = await eventServie.getBookedSlotByDate(startDate);
+					const slotsGrp = dateHelper.groupByAmPm(bookedSlots);
+					bookedEvents[startDate] = slotsGrp;
+					startDate = dateHelper.getDate(moment(startDate).add(1, 'days'));
+				}
+				resolve(bookedEvents);
 			} catch (error) {
 				reject(error);
 			}
