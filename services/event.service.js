@@ -1,11 +1,37 @@
 const serviceConstant = require('./constants');
 const moment = require('moment');
+const dateHelper = require('../utils/date.utils');
+const EventRepo = require('../repositories/event.repository');
 
 class EventService {
-	getBookedSlotByDate(date, bookedEvent) {
+	constructor() {
+		this.eventRepo = new EventRepo();
+	}
+
+	getFreeSlot(date, startDateTime, endDateTime) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				// all slots as per doctor availability
+				const allSlots = dateHelper.getAllSlots(startDateTime, endDateTime, serviceConstant.DURATION); 
+
+				// Get all booked slots
+				const bookedSlots = await this.getBookedSlotByDate(date);
+                
+				// Get free slots
+				const freeSlots = allSlots.filter(slot => !bookedSlots.includes(slot));
+				resolve(freeSlots);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	}
+
+	getBookedSlotByDate(date) {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const bookedSlot = [];
+				const bookedEvent = await this.eventRepo.fetchEventByDate(date);
+
 				if (bookedEvent && Object.keys(bookedEvent).length > 0) {
 					Object.keys(bookedEvent).forEach(element => {
 						const ele = bookedEvent[element];

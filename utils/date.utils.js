@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 const serviceConstant = require('../services/constants');
 
 module.exports = {
@@ -43,6 +43,31 @@ module.exports = {
 			return {
 				reqStartSlot: '',
 				reqEndSlot: '',
+			};
+		}
+	},
+
+	groupByAmPm: (times, tz) => {
+		try {
+			const AM = [];
+			const PM = [];
+			const timeZone = serviceConstant.TIME_ZONE[tz];
+			for (let i = 0; i < times.length; i++) {
+				const tzTime = moment.tz(times[i], timeZone).format('hh:mm A');
+				if (tzTime.indexOf('AM') > 0) {
+					AM.push(tzTime);
+				} else {
+					PM.push(tzTime);
+				}
+			}
+			return {
+				AM,
+				PM,
+			};
+		} catch (error) {
+			return {
+				AM: [],
+				PM: [],
 			};
 		}
 	},

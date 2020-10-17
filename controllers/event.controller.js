@@ -25,6 +25,37 @@ class EventController {
 					next(error);
 				}
 			});
+		
+		app.route('/free-slots')
+			.get(async (request, response, next) => {
+				try {
+					const {
+						date,
+						timezone,
+					} = request.query;
+
+					const validator = new EventValidator();
+					validator.freeSlots(request.query);
+
+					const eventBiz = new EventBiz();
+					const slots = await eventBiz.getFreeSlots(date, timezone);
+
+					response.json({
+						slots,
+					}, 'Slots Fetched');
+				} catch (error) {
+					next(error);
+				}
+			});
+
+		app.route('/booked-evnets')
+			.get(async (request, response, next) => {
+				try {
+					
+				} catch (error) {
+					next(error);
+				}
+			});
 	}
 }
 

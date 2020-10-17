@@ -17,4 +17,25 @@ module.exports = {
 			},
 		},
 	},
+	freeSlotsSchema: {
+		id: '/free-slot',
+		type: 'object',
+		additionalProperties: true,
+		required: [],
+		properties: {
+			date: {
+				type: 'string',
+				pattern: '\\d{4}-[01]\\d-[0-3]\\d$',
+			},
+			timezone: {
+				type: 'string',
+				enum: [
+					'EDT',
+					'IST',
+					'AEDT',
+					'JST',
+				],
+			},
+		},
+	},
 };

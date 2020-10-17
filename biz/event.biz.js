@@ -1,7 +1,6 @@
 const serviceConstants = require('../services/constants');
 const dateHelper = require('../utils/date.utils');
 const moment = require('moment');
-const EventRepo = require('../repositories/event.repository');
 const EventService = require('../services/event.service');
 
 const {
@@ -9,10 +8,6 @@ const {
 } = require('../exceptions');
 
 class EventBiz {
-	constructor() {
-		this.eventRepo = new EventRepo();
-	}
-
 	createEvent(dateTime, duration) {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -25,7 +20,8 @@ class EventBiz {
 				const endDateTime = moment(date + serviceConstants.END_TIME).utc();
 
 				// Get free slot
-				const freeSlot = await this.getFreeSlot(date, startDateTime, endDateTime);
+				const eventServie = new EventService();
+				const freeSlot = await eventServie.getFreeSlot(date, startDateTime, endDateTime);
 
 				
 				// make duration to multiple of 30
@@ -59,21 +55,21 @@ class EventBiz {
 			}
 		});
 	}
-    
-	getFreeSlot(date, startDateTime, endDateTime) {
+
+	getFreeSlots(date, timeZone) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				// all slots as per doctor availability
-				const allSlots = dateHelper.getAllSlots(startDateTime, endDateTime, serviceConstants.DURATION); 
+				const startDateTime = moment(date + serviceConstants.START_TIME).utc();
+				const endDateTime = moment(date + serviceConstants.END_TIME).utc();
 
-				// Get all booked slots
-				const eventService = new EventService();
-				const bookedEvent = await this.eventRepo.fetchEventByDate(date);
-				const bookedSlots = await eventService.getBookedSlotByDate(date, bookedEvent);
-                
-				// Get free slots
-				const freeSlots = allSlots.filter(slot => !bookedSlots.includes(slot));
-				resolve(freeSlots);
+				// Get free slot
+				const eventServie = new EventService();
+				const freeSlot = await eventServie.getFreeSlot(date, startDateTime, endDateTime);
+				
+
+				// Group by AM, PM
+				const freeSlotsGrp = dateHelper.groupByAmPm(freeSlot, timeZone);
+				resolve(freeSlotsGrp);
 			} catch (error) {
 				reject(error);
 			}

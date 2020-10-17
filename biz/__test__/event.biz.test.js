@@ -1,5 +1,16 @@
+const admin = require('firebase-admin');
+const serviceAccount = require('../../firebase.json');
+const config = require('config');
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: `https://${config.get('db.firebase.project-id')}.firebaseio.com`,
+	authDomain: `${config.get('db.firebase.project-id')}.firebaseapp.com`,
+});
+
+global.db = admin.database();
+
 const EventBiz = require('../event.biz');
-const moment = require('moment');
 
 describe('Test event business logic', () => {
 	it('Test Create Event', async () => {
@@ -20,12 +31,11 @@ describe('Test event business logic', () => {
 		}
 	});
 
-	it('Test free slots', async () => {
-		const startDate = moment('2020-10-17T04:30:00Z').utc();
-		const endDate = moment('2020-10-17T11:30:00Z').utc();
+	it('Test Free slot', async () => {
 		const date = '2020-10-17';
+		const timeZone = 'IST';
 		const eventBiz = new EventBiz();
-		const data = await eventBiz.getFreeSlot(date, startDate, endDate);
+		const data = await eventBiz.getFreeSlots(date, timeZone);
 		console.log(data);
 	});
 });
