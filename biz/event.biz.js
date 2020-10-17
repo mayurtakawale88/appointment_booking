@@ -2,6 +2,7 @@ const serviceConstants = require('../services/constants');
 const dateHelper = require('../utils/date.utils');
 const moment = require('moment');
 const EventService = require('../services/event.service');
+const EventRepo = require('../repositories/event.repository');
 
 const {
 	SlotAvailabilityException,
@@ -15,7 +16,7 @@ class EventBiz {
 				const date = dateHelper.getDate(dateTime);
                 
 				// Check given date and time is greater than current date time validation
-				if (new Date() > new Date(date)) {
+				if (date < dateHelper.getDate(new Date(date))) {
 					throw new InvalidParamException('Date should be greated than current date');
 				}
 
@@ -46,7 +47,8 @@ class EventBiz {
 				}
 				const startTime = reqStartSlot.format();
 				const endTime = moment(reqEndSlot).add(serviceConstants.DURATION, 'minutes').utc().format();
-				await this.eventRepo.insertEvent(date, startTime, endTime, duration);
+				const eventRepo = new EventRepo();
+				await eventRepo.insertEvent(date, startTime, endTime, duration);
 				resolve({
 					date,
 					startTime,
@@ -63,8 +65,8 @@ class EventBiz {
 		return new Promise(async (resolve, reject) => {
 			try {
 				// date validation passed date should not be lower than current date
-				if (new Date() > new Date(date)) {
-					throw new InvalidParamException('Date should be greated than current date');
+				if (date < dateHelper.getDate(new Date(date))) {
+					throw new InvalidParamException('Date should be greater than current date');
 				}
 
 				const startDateTime = moment(date + serviceConstants.START_TIME).utc();
