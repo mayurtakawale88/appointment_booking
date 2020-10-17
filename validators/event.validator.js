@@ -2,17 +2,17 @@ const BaseValidator = require('./base.validator');
 
 const SchemaValidator = require('jsonschema').Validator;
 
-const { someSchema } = require('../schema/some.schema');
+const { createEventSchema } = require('../schema/event.schema');
 
-class SomeValidator extends BaseValidator {
+class EventValidator extends BaseValidator {
 	create(data) {
 		try {
 			const schemaValidator = new SchemaValidator();
-			super.prepareValidationErrorObj(schemaValidator.validate(data, someSchema));
+			super.prepareValidationErrorObj(schemaValidator.validate(data, createEventSchema));
 		} catch (error) {
 			throw error;
 		}
 	}
 }
 
-module.exports = SomeValidator;
+module.exports = EventValidator;

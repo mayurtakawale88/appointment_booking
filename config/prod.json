@@ -1,3 +1,12 @@
 {
-	"env": "production"
+	"env": "production",
+	"db": {
+        "mysql": {
+			"host": "mysqldev.db.flexiloans.com",	           
+            "port": "3306",	           
+            "database": "los_dev_db1",	           
+            "user": "topup_user",	           
+            "password": "qaSDFrt67uijw564hredwws"
+		}
+	}
 }

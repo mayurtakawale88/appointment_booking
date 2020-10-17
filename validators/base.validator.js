@@ -4,6 +4,7 @@ class BaseValidator {
 	prepareValidationErrorObj(validatorResult) {
 		try {
 			if (!validatorResult.valid) {
+				console.log(validatorResult);
 				throw new SchemaException(validatorResult.errors);
 			}
 		} catch (error) {
