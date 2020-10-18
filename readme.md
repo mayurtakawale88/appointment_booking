@@ -37,9 +37,11 @@ Start project
 Description :- API is developed to book an appointment. This is POST API and it require date time in [UTC] format
 
 API:-
-        Endpoint :- http://localhost:8607/api/create-event
-        Method :- POST
-        Header :- Content-Type: application/json
+```
+Endpoint :- http://localhost:8607/api/create-event
+Method :- POST
+Header :- Content-Type: application/json
+```
 
 Request Body :-
 ```
@@ -79,8 +81,10 @@ curl --location --request POST 'http://localhost:8607/api/create-event' \
 Description :- Get all avaialble solts for the day as per supplied timezone. Make sure supplied date shuld be grater than and equal to current date.
 
 API:-
-        Endpoint :- http://localhost:8607/api/free-slots?date=2020-10-18&timezone=IST
-        Method :- GET
+```
+Endpoint :- http://localhost:8607/api/free-slots?date=2020-10-18&timezone=IST
+Method :- GET
+```
 
 Response :- 
 ```
@@ -127,8 +131,10 @@ Supported Timezone:-
 Description :- API to retrive all booked event between given date range
 
 API:-
-        Endpoint :- http://localhost:8607/api/booked-events?dateFrom=2020-10-17&dateTo=2020-10-20
-        Method :- GET
+```
+Endpoint :- http://localhost:8607/api/booked-events?dateFrom=2020-10-17&dateTo=2020-10-20
+Method :- GET
+```
 
 Respone :-
 ```
